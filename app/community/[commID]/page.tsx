@@ -10,14 +10,8 @@ import Editor from "@/components/editor";
 import { MapProvider } from "@/providers/map-provider";
 import { MapComponent2 } from "@/components/map2";
 
-
-type PageProps = {
-    params: { commID: string };
-  };
-  
-  const Community2 = async ({ params }: PageProps) => {
-    // Server-side params access
-    const { commID } = params;
+const Community2 = async ({ params }: { params: { commID: string } }) => {
+    const { commID } =  params;
     // const [map, setMapp] = useState<mapItem[]>([])
     const getData2 = async () => {
         const headers = {
