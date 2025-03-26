@@ -1,10 +1,16 @@
+
 import Nav from "@/components/nsv";
+
+import axios from "axios";
+
 import CommPage from "@/components/commPage";
 import { mapItem, Member } from "@/types.db";
 import Members from "@/components/members";
 import Editor from "@/components/editor";
 import { MapProvider } from "@/providers/map-provider";
 import { MapComponent2 } from "@/components/map2";
+// If you have a custom PageProps type, adjust it to:
+
 
 type Params = Promise<{ commId: string }>
 
@@ -13,75 +19,109 @@ type Params = Promise<{ commId: string }>
     const params = await props.params;
     const id = params.commId;
 
+    // dd
+
+    console.log("-------------------")
+    console.log(params.commId)
+    // const [map, setMapp] = useState<mapItem[]>([])
+    const getData2 = async () => {
+
+
+        const headers = {
+            'x-api-key': 'proTract22$'
+        };
+        const params = {
+            'community_id': id,
+            // Add more parameters as needed
+        };
+
+        try {
+            const response = await axios.get('https://accounts.protracc.com/api/members', {
+                headers,
+                params
+            });
+
+            // Save the data to the state variable
+            return response.data.data as Member[]
+
+            
+
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+
+    const getUniqueOrgIds = (dataArray: Member[]): string[] => {
+        const orgIds = dataArray.map(item => item.org_id);
+        return Array.from(new Set(orgIds));
+      };
+      
+      // Usage
+
+    // await getData()
+    const response = await getData2() 
+
+
+    const getData3 = async () => {
+        if (response) {
+            const uniqueOrgIds = getUniqueOrgIds(response);
+
     
-  const fetchMembers = async (): Promise<Member[] | null> => {
-    try {
-      const response = await fetch(
-        `https://accounts.protracc.com/api/members?community_id=${id}`,
-        {
-          headers: {
-            'x-api-key': 'proTract22$',
-          },
-          next: { revalidate: 60 },
+            // Initialize the map array
+            let map: mapItem[] = [];
+    
+            // Iterate through uniqueOrgIds and fetch data
+            for (const x of uniqueOrgIds) { // Use 'of' instead of 'in' to iterate over array values
+                try {
+                    const response4 = await axios.get('https://accounts.protracc.com/api/getAssets', {
+                        headers: {
+                            'x-api-key': 'proTract22$'
+                        },
+                        params: {
+                            'org_id': x
+                        }
+                    });
+    
+                    // Append the result to map
+                    const result = response4.data.data as mapItem[];
+                    console.log(result)
+                    map = [...map, ...result];
+                } catch (error) {
+                    console.error(`Error fetching data for org_id ${x}:`, error);
+                }
+            }
+    
+            // Return the map array after all iterations
+            return map;
         }
-      );
+    
+        return []; // Return an empty array if response is undefined
+    };
+    
+    // Usage Example
 
-      if (!response.ok) throw new Error('Failed to fetch members');
-      const data = await response.json();
-      return data.data as Member[];
-    } catch (error) {
-      console.error('Error fetching members:', error);
-      return null;
-    }
-  };
+    const map = await getData3();
+    console.log("Final Map Array:", map);
 
-  const fetchAssets = async (orgId: string): Promise<mapItem[] | null> => {
-    try {
-      const response = await fetch(
-        `https://accounts.protracc.com/api/getAssets?org_id=${orgId}`,
-        {
-          headers: {
-            'x-api-key': 'proTract22$',
-          },
-          next: { revalidate: 60 },
-        }
-      );
 
-      if (!response.ok) throw new Error('Failed to fetch assets');
-      const data = await response.json();
-      return data.data as mapItem[];
-    } catch (error) {
-      console.error(`Error fetching assets for org ${orgId}:`, error);
-      return null;
-    }
-  };
 
-  const members = await fetchMembers();
-  
-  const mapData = members 
-    ? (await Promise.all(
-        Array.from(new Set(members.map(m => m.org_id)))
-          .map(async orgId => await fetchAssets(orgId))
-      )).flat().filter(Boolean) as mapItem[]
-    : [];
+    return (
+        <><div className="flex h-screen">
+            <Nav comm={id}/>
+            <div className="flex-1 p-4 overflow-y-auto h-full">
+                <MapProvider>
+                    <MapComponent2 data={map}/>
+                </MapProvider>
+               <Editor comm={id}/>
+                <CommPage comm={id}/>
+                <Members members={response}/>
+            </div>
 
-  if (!members) {
-    return <div>Error loading community data</div>;
-  }
-
-  return (
-    <div className="flex h-screen">
-      <Nav comm={id} />
-      <div className="flex-1 p-4 overflow-y-auto h-full">
-        <MapProvider>
-          <MapComponent2 data={mapData} />
-        </MapProvider>
-        <Editor comm={id} />
-        <CommPage comm={id} />
-        <Members members={members} />
-      </div>
-    </div>
-  );
-};
+        </div>
+        </>
+    );
+}
 
 export default Community2;
