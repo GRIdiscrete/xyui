@@ -6,7 +6,7 @@ we need to make this component client rendered as well else error occurs
 
 import { mapItem, Point} from "@/types.db";
 //Map component Component from library
-import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, LoadScript, Marker } from "@react-google-maps/api";
 import { useState } from "react";
 
 //Map's styling
@@ -49,6 +49,7 @@ const MapComponent = ({data}: dataProps) => {
 
     return (
       <div className="w-full">
+        <LoadScript googleMapsApiKey="AIzaSyDpli1UvuqODlCd-NBLs0hw-4G9a6kbzHo">
       <GoogleMap
         mapContainerStyle={defaultMapContainerStyle}
         center={defaultMapCenter}
@@ -97,7 +98,7 @@ const MapComponent = ({data}: dataProps) => {
             
           })
         }
-      </GoogleMap>
+      </GoogleMap></LoadScript>
     </div>
     )
 };

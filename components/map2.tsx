@@ -1,7 +1,7 @@
 'use client'
 
 import { mapItem, Point } from "@/types.db";
-import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, LoadScript, Marker } from "@react-google-maps/api";
 import { useState, useEffect } from "react";
 
 export const defaultMapContainerStyle = {
@@ -157,54 +157,57 @@ const MapComponent2 = ({ data }: { data: mapItem[] }) => {
         )}
       </form>
       <div className="w-full mb-4">
-        <GoogleMap
-          mapContainerStyle={defaultMapContainerStyle}
-          center={mapCenter}
-          zoom={defaultMapZoom}
-          options={defaultMapOptions}
-        >
-          {getPointsToDisplay().map(({ point, parentItem }, index) => {
-            const position = {
-              lat: parseFloat(point.latitude),
-              lng: parseFloat(point.longitude)
-            };
-            return (
-              <Marker
-                key={index}
-                position={position}
-                onClick={() => setSelectedPoint(parentItem)}
-              >
-                {selectedPoint === parentItem && (
-                  <InfoWindow onCloseClick={() => setSelectedPoint(null)}>
-                    <div className="p-4 text-sm bg-white shadow-md rounded-lg">
-                      <h3 className="font-bold text-lg mb-2 text-blue-600">{parentItem.name}</h3>
-                      <div className="space-y-1">
-                        <p className="text-gray-700">
-                          <span className="font-semibold">Category:</span> {parentItem.category}
-                        </p>
-                        <p className="text-gray-700">
-                          <span className="font-semibold">Sub Category:</span> {parentItem.sub_cat}
-                        </p>
-                        <p className="text-gray-700">
-                          <span className="font-semibold">Location:</span> {parentItem.location}
-                        </p>
-                      </div>
-                      {parentItem.qbar && (
-                        <div className="mt-4">
-                          <img
-                            src={parentItem.qbar}
-                            alt="QR Code"
-                            className="w-24 h-24 mx-auto rounded border border-gray-300"
-                          />
+        <LoadScript googleMapsApiKey="AIzaSyDpli1UvuqODlCd-NBLs0hw-4G9a6kbzHo">
+          <GoogleMap
+          
+            mapContainerStyle={defaultMapContainerStyle}
+            center={mapCenter}
+            zoom={defaultMapZoom}
+            options={defaultMapOptions}
+          >
+            {getPointsToDisplay().map(({ point, parentItem }, index) => {
+              const position = {
+                lat: parseFloat(point.latitude),
+                lng: parseFloat(point.longitude)
+              };
+              return (
+                <Marker
+                  key={index}
+                  position={position}
+                  onClick={() => setSelectedPoint(parentItem)}
+                >
+                  {selectedPoint === parentItem && (
+                    <InfoWindow onCloseClick={() => setSelectedPoint(null)}>
+                      <div className="p-4 text-sm bg-white shadow-md rounded-lg">
+                        <h3 className="font-bold text-lg mb-2 text-blue-600">{parentItem.name}</h3>
+                        <div className="space-y-1">
+                          <p className="text-gray-700">
+                            <span className="font-semibold">Category:</span> {parentItem.category}
+                          </p>
+                          <p className="text-gray-700">
+                            <span className="font-semibold">Sub Category:</span> {parentItem.sub_cat}
+                          </p>
+                          <p className="text-gray-700">
+                            <span className="font-semibold">Location:</span> {parentItem.location}
+                          </p>
                         </div>
-                      )}
-                    </div>
-                  </InfoWindow>
-                )}
-              </Marker>
-            );
-          })}
-        </GoogleMap>
+                        {parentItem.qbar && (
+                          <div className="mt-4">
+                            <img
+                              src={parentItem.qbar}
+                              alt="QR Code"
+                              className="w-24 h-24 mx-auto rounded border border-gray-300"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </InfoWindow>
+                  )}
+                </Marker>
+              );
+            })}
+          </GoogleMap>
+        </LoadScript>
       </div>
     </div>
   );
