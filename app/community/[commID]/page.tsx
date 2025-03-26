@@ -9,16 +9,27 @@ import Members from "@/components/members";
 import Editor from "@/components/editor";
 import { MapProvider } from "@/providers/map-provider";
 import { MapComponent2 } from "@/components/map2";
+// If you have a custom PageProps type, adjust it to:
 
-const Community2 = async ({ params }: { params: { commID: string } }) => {
-    const commID  =  params.commID;
+
+type Params = Promise<{ commId: string }>
+
+
+  const Community2 = async (props: { params: Params }) => {
+    const params = await props.params;
+    const id = params.commId;
+
+    console.log("-------------------")
+    console.log(id)
     // const [map, setMapp] = useState<mapItem[]>([])
     const getData2 = async () => {
+
+
         const headers = {
             'x-api-key': 'proTract22$'
         };
         const params = {
-            'community_id': commID,
+            'community_id': id,
             // Add more parameters as needed
         };
 
@@ -96,13 +107,13 @@ const Community2 = async ({ params }: { params: { commID: string } }) => {
 
     return (
         <><div className="flex h-screen">
-            <Nav comm={commID}/>
+            <Nav comm={id}/>
             <div className="flex-1 p-4 overflow-y-auto h-full">
                 <MapProvider>
                     <MapComponent2 data={map}/>
                 </MapProvider>
-               <Editor comm={commID}/>
-                <CommPage comm={commID}/>
+               <Editor comm={id}/>
+                <CommPage comm={id}/>
                 <Members members={response}/>
             </div>
 

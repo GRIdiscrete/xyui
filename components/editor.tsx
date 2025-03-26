@@ -21,6 +21,7 @@ const Editor = ({comm}: commProps) => {
 
 
 
+
     const [communityName, setCommunityName] = useState('');
     const [hq, setHq] = useState('');
     const [about, setAbout] = useState('');
@@ -70,12 +71,12 @@ const Editor = ({comm}: commProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault(); 
-    
+// For a change event on an <input type="file">
 
-        const fileInput = e.target.logo;
   
         // Get the file from the input element
-        const file = fileInput.files[0];
+// For a change event on an <input type="file">
+      const file = (e.target as HTMLInputElement).files?.[0]; // Access first file
 
         
 

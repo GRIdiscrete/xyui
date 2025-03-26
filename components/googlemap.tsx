@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import axios from 'axios';
+import Link from 'next/link';
 
 interface commProps {
   comms: Community[];
@@ -187,7 +188,10 @@ const GoogleMap2 = ({comms, comms2, data}: commProps) => {
               {comms.map((community, index) => (
               <a
                 key={index}
-                onClick={() => {router.push(`community/${community.id}`)}}
+                onClick={() => {
+                  sessionStorage.setItem('comm', community.id)
+                  router.push(`community/${community.id}`)
+                }}
                 className="block p-2 hover:bg-green-700 transition-all ease-in-out duration-800 hover:text-white rounded cursor-pointer"
               >
                 {community.title}
