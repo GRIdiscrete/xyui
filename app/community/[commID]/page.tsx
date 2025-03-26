@@ -12,11 +12,10 @@ import { MapComponent2 } from "@/components/map2";
 // If you have a custom PageProps type, adjust it to:
 
 
-type Params = Promise<{ commId: string }>
 
+  const Community2 = async ({
+    params}: {params: { commId: string}}) => {
 
-  const Community2 = async (props: { params: Params }) => {
-    const params = await props.params;
     const id = params.commId;
 
     console.log("-------------------")
