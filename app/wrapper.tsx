@@ -2,6 +2,7 @@
 
 
 
+import { LoadScript } from '@react-google-maps/api';
 import GoogleMap from './page'; // Import your server component
 
 const GoogleMapWrapper = () => {
@@ -11,7 +12,10 @@ const GoogleMapWrapper = () => {
   if (!user) {
     console.log("asfsfasfasfasfasf")
   }
-  return <GoogleMap />;
+  return <>
+  <LoadScript googleMapsApiKey='AIzaSyDpli1UvuqODlCd-NBLs0hw-4G9a6kbzHo'>
+  <GoogleMap /></LoadScript>
+  </>;
 };
 
 export default GoogleMapWrapper;

@@ -157,7 +157,8 @@ const MapComponent2 = ({ data }: { data: mapItem[] }) => {
         )}
       </form>
       <div className="w-full mb-4">
-        <LoadScript googleMapsApiKey="AIzaSyDpli1UvuqODlCd-NBLs0hw-4G9a6kbzHo">
+
+
           <GoogleMap
           
             mapContainerStyle={defaultMapContainerStyle}
@@ -207,7 +208,7 @@ const MapComponent2 = ({ data }: { data: mapItem[] }) => {
               );
             })}
           </GoogleMap>
-        </LoadScript>
+   
       </div>
     </div>
   );
