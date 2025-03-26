@@ -59,7 +59,7 @@ type Params = Promise<{ commId: string }>
       // Usage
 
     // await getData()
-    const response = await getData2()
+    const response = await getData2() 
 
 
     const getData3 = async () => {
