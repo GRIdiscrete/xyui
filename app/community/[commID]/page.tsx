@@ -16,7 +16,9 @@ type Params = Promise<{ commId: string }>
 
 
   const Community2 = async (props: { params: Params }) => {
-    const params = await props.params;
+    const params = await (props.params);
+
+    
     const id = params.commId;
 
     // dd
@@ -108,19 +110,24 @@ type Params = Promise<{ commId: string }>
 
 
     return (
-        <><div className="flex h-screen">
-            <Nav comm={id}/>
-            <div className="flex-1 p-4 overflow-y-auto h-full">
-                <MapProvider>
-                    <MapComponent2 data={map}/>
-                </MapProvider>
-               <Editor comm={id}/>
-                <CommPage comm={id}/>
-                <Members members={response}/>
-            </div>
+            <>
+                {!response ? (
+                    <p>Loading...</p>
+                ) : (
+                    <div className="flex h-screen">
+                        <Nav comm={id} />
+                        <div className="flex-1 p-4 overflow-y-auto h-full">
+                            <MapProvider>
+                                <MapComponent2 data={map} />
+                            </MapProvider>
+                            <Editor comm={id} />
+                            <CommPage comm={id} />
+                            <Members members={response} />
+                        </div>
+                    </div>
+                )}
+            </>
 
-        </div>
-        </>
     );
 }
 
