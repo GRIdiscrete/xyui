@@ -10,7 +10,7 @@ import Editor from "@/components/editor";
 import { MapProvider } from "@/providers/map-provider";
 import { MapComponent2 } from "@/components/map2";
 
-const Community2 = async ({ params }: { params: { commID: string } }) => {
+const Community2 = async ({ params }: { params: { commID: any } }) => {
     const { commID } =  params;
     // const [map, setMapp] = useState<mapItem[]>([])
     const getData2 = async () => {
